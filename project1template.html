@@ -11,7 +11,6 @@
 		<!-- canvas tag for Fabric.js to draw into -->
 		<canvas id="c" width="4140" height="2200" style="border:2px solid black;" ></canvas>
     
-
 </body>
  
 <script>
@@ -265,14 +264,14 @@ var mat = new fabric.Rect({
 
 //Water in the tub
 
-fabric.Image.fromURL('Assets/filltub.svg', function(filltubImg) {
-  console.log(filltubImg);
-  // scale image down, and flip it, before adding it onto canvas
-  filltubImg.scale(0.5).setFlipX(true);
-  filltubImg.setLeft(1600);
-  //oImg.opacity(0.5);
-  canvas.add(filltubImg);
-});
+// fabric.Image.fromURL('Assets/filltub.svg', function(filltubImg) {
+//   console.log(filltubImg);
+//   // scale image down, and flip it, before adding it onto canvas
+//   filltubImg.scale(0.5).setFlipX(true);
+//   filltubImg.setLeft(1600);
+//   //oImg.opacity(0.5);
+//   canvas.add(filltubImg);
+// });
 
 
 // Back wall controls -- Add ons
@@ -297,17 +296,16 @@ var backdrop3 = new fabric.Circle({
   top: 60
 });
 
-backdrop1.on('selected', function() {
+//backdrop1.on('selected', function() {
 
-fabric.Image.fromURL('Assets/moonlight.jpg', function(oImg) {
-  // scale image down, and flip it, before adding it onto canvas
-  oImg.scale(0.5).setFlipX(true);
-  //oImg.opacity(0.5);
-  canvas.add(oImg);
-});
+// fabric.Image.fromURL('Assets/moonlight.jpg', function(oImg) {
+//   // scale image down, and flip it, before adding it onto canvas
+//   oImg.scale(0.5).setFlipX(true);
+//   //oImg.opacity(0.5);
+//   canvas.add(oImg);
+// });
 
-
-});
+//});
 
 // Adding an analog Clock 
 
@@ -329,7 +327,7 @@ canvas.add(mat);
 canvas.add(backdrop1);
 canvas.add(backdrop2);
 canvas.add(backdrop3);
-canvas.add(moonlightInstance);
+//canvas.add(moonlightInstance);
 
 
 // code adapted from http://jsfiddle.net/tornado1979/39up3jcm/
