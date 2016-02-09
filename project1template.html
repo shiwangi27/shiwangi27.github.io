@@ -124,7 +124,7 @@ var btnClockOnSelect = function(canvas){
     fabric.Image.fromURL('Assets/clock.png', function(image) {
     image.setLeft(100);
     image.setTop(600);
-    image.scale(0.3);
+    image.scale(0.5);
     canvas.add(image);
 
     canvas.deactivateAll();
@@ -826,7 +826,7 @@ var menu4 = new fabric.Circle({
 
 fabric.Image.fromURL('Assets/clock.png', function(menu4Img) {
     
-    menu4Img.scale(0.1).set({ left: 1530, top: 830});
+    menu4Img.scale(0.07).set({ left: 1530, top: 830});
     var btnClock = new fabric.Group([ menu4, menu4Img ], {
     left: 2100,
     top: 1200,
