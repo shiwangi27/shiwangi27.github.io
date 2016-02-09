@@ -10,7 +10,7 @@
 <body>
 		<!-- canvas tag for Fabric.js to draw into -->
 		<canvas id="c" width="4140" height="2200" style="border:2px solid black;" ></canvas>
-    
+
 </body>
  
 <script>
@@ -22,7 +22,136 @@
 // you should pick an appropriate local size and canvas size that are easy for you to work with
 var currentBlue = 0.1;
 var currentRed = 0.1;
+var backgroundImage;
 (function() {
+
+//Weather api starts here 
+var createImage = function(src, title) {
+  var img   = new Image();
+  img.src   = src;
+  img.alt   = title;
+  img.title = title;
+  return img; 
+};
+
+// array of images
+var images = [];
+
+// push two images to the array
+images.push(createImage("Assets/thunderstorms.png", "thunderstorm"));
+images.push(createImage("Assets/drizzle.png", "drizzle"));
+images.push(createImage("Assets/rain.png", "rain"));
+images.push(createImage("Assets/snow.png", "snow"));
+images.push(createImage("Assets/fog.png", "atmosphere"));
+images.push(createImage("Assets/clearsky.png", "clear"));
+images.push(createImage("Assets/clouds.png", "clouds"));
+images.push(createImage("Assets/extreme.png", "extreme"));
+images.push(createImage("Assets/breeze.png", "additional"));
+
+// output
+console.log(images);
+
+//Using the openweather api
+var xmlhttp = new XMLHttpRequest();
+var url = "http://api.openweathermap.org/data/2.5/weather?q=Chicago&APPID=c8259609d17ea2d1ca2a92d0f0565863";
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        var myArr = JSON.parse(xmlhttp.responseText);
+        console.log(myArr.weather[0].main);
+        console.log(myArr.weather[0].description);
+        //console.log(myArr.main.temp)
+
+        if(myArr.weather[0].main == 'Clouds'){
+          var imgInstance = new fabric.Image(images[6], {
+          left: 100,
+          top: 100,
+          opacity: 0.85
+          });
+          canvas.add(imgInstance);
+          //console.log(images[6]);
+           var weatherText = new fabric.Text('Weather', {
+             fontSize: 60,
+             fontWeight: 'bold',
+             left: 60,
+             top: 60
+          });
+           canvas.add(weatherText);
+        }
+
+          if(myArr.weather[0].main == 'Clear'){
+          var imgInstance = new fabric.Image(images[5], {
+          left: 100,
+          top: 100,
+          opacity: 0.85
+          });
+          canvas.add(imgInstance);
+          //console.log(images[6]);
+           var weatherText = new fabric.Text('Weather', {
+             fontSize: 60,
+             fontWeight: 'bold',
+             left: 60,
+             top: 60
+          });
+           canvas.add(weatherText);
+        }
+
+        if(myArr.weather[0].main == 'Snow'){
+          var imgInstance = new fabric.Image(images[3], {
+          left: 100,
+          top: 100,
+          opacity: 0.85
+          });
+          canvas.add(imgInstance);
+          //console.log(images[6]);
+           var weatherText = new fabric.Text('Weather', {
+             fontSize: 60,
+             fontWeight: 'bold',
+             left: 60,
+             top: 60
+          });
+           canvas.add(weatherText);
+        }
+
+        if(myArr.weather[0].main == 'Drizzle'){
+          var imgInstance = new fabric.Image(images[1], {
+          left: 100,
+          top: 100,
+          opacity: 0.85
+          });
+          canvas.add(imgInstance);
+          //console.log(images[6]);
+           var weatherText = new fabric.Text('Weather', {
+             fontSize: 60,
+             fontWeight: 'bold',
+             left: 60,
+             top: 60
+          });
+           canvas.add(weatherText);
+        }
+        if(myArr.weather[0].main == 'Rain'){
+          var imgInstance = new fabric.Image(images[2], {
+          left: 100,
+          top: 100,
+          opacity: 0.85
+          });
+          canvas.add(imgInstance);
+          //console.log(images[6]);
+           var weatherText = new fabric.Text('Weather', {
+             fontSize: 60,
+             fontWeight: 'bold',
+             left: 60,
+             top: 60
+          });
+           canvas.add(weatherText);
+        }
+
+    }
+};
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+//Weather API ends here
 
   var localHeight = 990;
   var localWidth = 1860;
@@ -98,10 +227,110 @@ bathSpout.lockMovementX = bathSpout.lockMovementY = true;
 
 // this lets me 'select' it but I cant keep clicking on it more than once
 
-var showerHead = new fabric.Circle({
-  radius: 20, fill: 'black', left: 1635, top: 100,   originX: 'center',
-  originY: 'center'
+
+// var showerHead = new fabric.Circle({
+//   radius: 40, fill: '#c3c1c7', left: 1635, top: 100,   originX: 'center',
+//   originY: 'center'
+// });
+
+
+// Rate of flow of Control
+
+var rateCount = 0;
+
+ fabric.Image.fromURL('Assets/rate1.png', function(rate1Img) {
+      rate1Img.scale(0.6).set({ left: 3480, top: 100});
+      canvas.add(rate1Img);
 });
+
+
+var rate1Draw = new fabric.Circle({
+  radius: 80,
+  fill: 'white',
+  stroke: 'black',
+  strokeWidth : 5,
+  left: 1000,
+  top: 800
+});
+
+  fabric.Image.fromURL('Assets/rate1.png', function(rate1Img) {
+  console.log(rate1Img);
+  rate1Img.scale(0.25).set({ left: 1025, top: 840});
+
+    var rate1Group = new fabric.Group([ rate1Draw, rate1Img ], {
+    left: 3400,
+    top: 800,
+    });
+    canvas.add(rate1Group);
+
+    rate1Group.on('selected', function(){
+      rateCount +=1;
+      fabric.Image.fromURL('Assets/rate1.png', function(rate1Img) {
+      rate1Img.scale(0.6).set({ left: 3480, top: 105});
+      canvas.add(rate1Img);
+    });
+    });
+
+});
+
+var rate2Draw = new fabric.Circle({
+  radius: 80,
+  fill: 'white',
+  stroke: 'black',
+  strokeWidth : 5,
+  left: 1000,
+  top: 800
+});
+
+  fabric.Image.fromURL('Assets/rate2.png', function(rate2Img) {
+  console.log(rate2Img);
+  rate2Img.scale(0.23).set({ left: 1025, top: 840});
+
+    var rate2Group = new fabric.Group([ rate2Draw, rate2Img ], {
+    left: 3560,
+    top: 800,
+    });
+    canvas.add(rate2Group);
+
+      rate2Group.on('selected', function(){
+      fabric.Image.fromURL('Assets/rate2.png', function(rate1Img) {
+      rate1Img.scale(0.5).set({ left: 3490, top: 105});
+      canvas.add(rate1Img);
+    });
+    });
+
+});
+
+var rate3Draw = new fabric.Circle({
+  radius: 80,
+  fill: 'white',
+  stroke: 'black',
+  strokeWidth : 5,
+  left: 1000,
+  top: 800
+});
+
+  fabric.Image.fromURL('Assets/rate3.png', function(rate3Img) {
+  console.log(rate3Img);
+  rate3Img.scale(0.215).set({ left: 1030, top: 835});
+
+    var rate3Group = new fabric.Group([ rate3Draw, rate3Img ], {
+    left: 3720,
+    top: 800,
+    });
+    canvas.add(rate3Group);
+
+     rate3Group.on('selected', function(){
+      fabric.Image.fromURL('Assets/rate3.png', function(rate1Img) {
+      rate1Img.scale(0.45).set({ left: 3490, top: 100});
+      canvas.add(rate1Img);
+    });
+    });
+
+});
+
+
+//api.openweathermap.org/data/2.5/weather?q={city name}
 
 var tempText = new fabric.Text('default', { left: 1635, top: 500, fontFamily: 'Arial', fontSize: 40, fontWeight: 'italic', originX: 'center',
   originY: 'center',});
@@ -111,20 +340,38 @@ tempText.selectable = false
 tempText.evented = false
 
 
-var sunshine = new fabric.Circle({
-  radius: 30, fill: 'red', left: 1500, top: 500,   originX: 'center',
-  originY: 'center'
+
+
+//Temperature Display
+
+var tempDisp = new fabric.Rect({
+  left: 1000,
+  top: 400,
+  fill: 'black',
+  stroke: 'red',
+  strokeWidth : 6,
+  width: 180,
+  opacity: 0.8,
+  height: 80,
+  angle: 0
 });
 
-var snowflake = new fabric.Circle({
-  radius: 30, fill: 'blue', left: 1770, top: 500,   originX: 'center',
+var T = 80;
+
+var tempDispText = new fabric.Text( T + ' F', {
+  left: 1100, 
+  top: 445, 
+  fontSize: 50, 
+  fill : 'red',
+  originX: 'center',
   originY: 'center'
-});
+}); 
 
-//Mat standing or sitting
- 
+ var tempDispGroup = new fabric.Group([ tempDisp, tempDispText ], {
+    left: 1540,
+    top: 200,
+    });
 
-//canvas.bringToFront(mat);
 
 var waterControl = new fabric.Circle({
   left: 1635,
@@ -136,93 +383,18 @@ var waterControl = new fabric.Circle({
 });
 
 
-sunshine.on('selected', function(e){
-  currentRed += 0.1;
-
-
-  canvas.deactivateAll().renderAll();
-  //console.log(currentRed);
-  // var f = function(a){ return a; }
-  // var a= {0: "red",
-  //   f(currentRed): "red",
-  //   1: "blue"
-  // }
-  var d = "blue";
-  if(currentRed < 1) {
-  var c = 'rgb('+ 255*currentBlue +',0,'+(255 - 255*currentBlue)+')'
-} else {
-  d = 'rgb('+ 255*currentBlue +',0,'+(255 - 255*currentBlue)+')'
-}
-
-  var start = 0;
-  var end=1;
-  var step = 0.2;
-  var j= start;
-  var stops= {};
-  while (j<end) {
-    var color = currentRed > j ? "red" : "blue"
-    stops[j] = color;
-    j+= step;
-  }
-
-  waterControl.setGradient('fill', {
-  x1: 0,
-  y1: 0,
-  x2: waterControl.width ,
-  y2: 0,
-  colorStops: stops
-  });
-
-});
-
-snowflake.on('selected', function(e){
-  currentRed -= 0.1;
-  //console.log(currentRed);
-  // var f = function(a){ return a; }
-  // var a= {0: "red",
-  //   f(currentRed): "red",
-  //   1: "blue"
-  // }
-  canvas.deactivateAll().renderAll();
-  var d = "blue";
-  if(currentRed < 1) {
-  var c = 'rgb('+ 255*currentBlue +',0,'+(255 - 255*currentBlue)+')'
-} else {
-  d = 'rgb('+ 255*currentBlue +',0,'+(255 - 255*currentBlue)+')'
-}
-
-  var start = 0;
-  var end=1;
-  var step = 0.2;
-  var j= start;
-  var stops= {};
-  while (j<end) {
-    var color = currentRed > j ? "red" : "blue"
-    stops[j] = color;
-    j+= step;
-  }
-
-  waterControl.setGradient('fill', {
-  x1: 0,
-  y1: 0,
-  x2: waterControl.width ,
-  y2: 0,
-  colorStops: stops
-  });
-});
-
-
 waterControl.setGradient('fill', {
 
-  x1: (-waterControl.width / 2),
+  x1: 0,
   y1: 0,
-  x2: waterControl.width / 2 -0.1,
+  x2: waterControl.width ,
   y2: 0,
   colorStops: {
-    0: "red",
-    1: "blue"
+    0: "#ff392E",
+    1: "#6961FF"
   }
 });
+
 
 var waterTemp = 0; 
  
@@ -239,6 +411,21 @@ else {
   //tempText.text = "cold"; 
   tempText.text = "F";
 } 
+
+  if (tempText.text == "C")
+  {
+    T = Math.floor((5/9) * (T - 32))
+    tempDispText.text = T + ' C' ; 
+  }
+  if (tempText.text == "F")
+  {
+    if (tempDispText.text != '80 F'){
+    
+    T = Math.floor(9/5 * T + 32);
+    tempDispText.text = T + ' F' ;
+    } 
+  }
+
 } 
 
 updateWaterTemp();
@@ -250,28 +437,182 @@ waterControl.on('selected', function() {
   canvas.deactivateAll(); // deselect everything
 });
 
+//Start of Temperature control
 
-var mat = new fabric.Rect({
-  left: 960,
-  top: 800,
-  originX: 'center',
-  originY: 'center',
-  fill: 'red',
-  width: 300,
-  height: 90
+var sunshine = new fabric.Circle({
+  radius: 30, fill: '#ff392E', left: 1500, top: 500,   originX: 'center',
+  originY: 'center'
+});
+
+fabric.Image.fromURL('Assets/sunshine.png', function(sunshineImg) {
+  console.log(sunshineImg);
+  sunshineImg.scale(0.2).set({ left: 3285, top: 1060});
+  
+    var sunshineGroup = new fabric.Group([ sunshine, sunshineImg ], {
+    left: 3300,
+    top: 1050,
+    });
+
+    canvas.add(sunshineGroup);
+
+  sunshineGroup.on('selected', function(e){
+  currentRed += 0.1;
+
+  if (tempText.text == 'F' && T < 140)
+  { 
+    T = T+4;
+    tempDispText.text = T + ' F';
+  }
+  if (tempText.text == 'C' )
+  {
+    T = T + 4;
+    tempDispText.text = T + 10 + ' C';
+  }
+
+  var d = "blue";
+  if(currentRed < 1) {
+  var c = 'rgb('+ 255*currentBlue +',0,'+(255 - 255*currentBlue)+')'
+} else {
+  d = 'rgb('+ 255*currentBlue +',0,'+(255 - 255*currentBlue)+')'
+}
+
+  var start = 0;
+  var end=1;
+  var step = 0.2;
+  var j= start;
+  var stops= {};
+  while (j<end) {
+    var color = currentRed > j ? "#ff392E" : "#6961FF"
+    stops[j] = color;
+    j+= step;
+  }
+
+  waterControl.setGradient('fill', {
+  x1: 0,
+  y1: 0,
+  x2: waterControl.width ,
+  y2: 0,
+  colorStops: stops
+  });
+
+   canvas.deactivateAll().renderAll();
+
 });
 
 
-//Water in the tub
+});
 
-// fabric.Image.fromURL('Assets/filltub.svg', function(filltubImg) {
-//   console.log(filltubImg);
-//   // scale image down, and flip it, before adding it onto canvas
-//   filltubImg.scale(0.5).setFlipX(true);
-//   filltubImg.setLeft(1600);
-//   //oImg.opacity(0.5);
-//   canvas.add(filltubImg);
-// });
+
+var snowflake = new fabric.Circle({
+  radius: 30, fill: '#6961FF', left: 1770, top: 500,   originX: 'center',
+  originY: 'center'
+});
+
+fabric.Image.fromURL('Assets/snowflake.png', function(snowflakeImg) {
+  console.log(snowflakeImg);
+  snowflakeImg.scale(0.16).set({ left: 3885, top: 1060});
+  
+    var snowflakeGroup = new fabric.Group([ snowflake, snowflakeImg ], {
+    left: 3830,
+    top: 1050,
+    });
+
+    canvas.add(snowflakeGroup);
+
+
+  snowflakeGroup.on('selected', function(e){
+  currentRed -= 0.1;
+
+  if (tempText.text == 'F' && T > 40)
+  { 
+    T = T-4;
+    tempDispText.text = T + ' F';
+  }
+  if (tempText.text == 'C' )
+  {
+    T = T - 4;
+    tempDispText.text = T + 10 + ' C';
+  }
+
+  var d = "blue";
+  if(currentRed < 1) {
+  var c = 'rgb('+ 255*currentBlue +',0,'+(255 - 255*currentBlue)+')'
+} else {
+  d = 'rgb('+ 255*currentBlue +',0,'+(255 - 255*currentBlue)+')'
+}
+
+  var start = 0;
+  var end=1;
+  var step = 0.2;
+  var j= start;
+  var stops= {};
+  while (j<end) {
+    var color = currentRed > j ? "#ff392E" : "#6961FF"
+    stops[j] = color;
+    j+= step;
+  }
+
+  waterControl.setGradient('fill', {
+  x1: 0,
+  y1: 0,
+  x2: waterControl.width ,
+  y2: 0,
+  colorStops: stops
+  });
+
+    canvas.deactivateAll().renderAll();
+});
+
+});
+//End of temperature control
+
+
+
+// Start of side wall Menu
+//!!!!!!!!!!!!! 6 icons group in a rectangle. 
+
+var menu1 = new fabric.Circle({
+  radius: 100,
+  fill: '#c3c1c7',
+  stroke: 'black',
+  strokeWidth : 5,
+  left: 1500,
+  top: 800
+});
+
+fabric.Image.fromURL('Assets/backdrop.png', function(menu1Img) {
+  console.log(menu1Img);
+  menu1Img.scale(0.5).set({ left: 1520, top: 850});
+  
+    var menu1Group = new fabric.Group([ menu1, menu1Img ], {
+    left: 1500,
+    top: 1200,
+    });
+
+    canvas.add(menu1Group);
+
+    var counter=0;
+
+    menu1Group.on('selected',function(){
+      counter+=1;
+      if(counter==1)
+      {
+    fabric.Image.fromURL('Assets/moonlight.jpg', function(oImg) {
+    canvas.remove(backgroundImage);
+    backgroundImage = oImg;
+    //scale image down, and flip it, before adding it onto canvas
+    oImg.scale(1.338).setFlipX(true);
+    oImg.setOpacity(0.7);
+    oImg.setLeft(1000);
+    canvas.add(oImg);
+    });    
+
+    canvas.deactivateAll();
+  }
+  });
+
+});
+
 
 
 // Back wall controls -- Add ons
@@ -296,19 +637,228 @@ var backdrop3 = new fabric.Circle({
   top: 60
 });
 
-//backdrop1.on('selected', function() {
 
-// fabric.Image.fromURL('Assets/moonlight.jpg', function(oImg) {
-//   // scale image down, and flip it, before adding it onto canvas
-//   oImg.scale(0.5).setFlipX(true);
-//   //oImg.opacity(0.5);
-//   canvas.add(oImg);
+backdrop1.on('selected', function() {
+  fabric.Image.fromURL('Assets/moonlight.jpg', function(oImg) {
+  canvas.remove(backgroundImage);
+  backgroundImage = oImg;
+  //scale image down, and flip it, before adding it onto canvas
+  oImg.scale(1.338).setFlipX(true);
+  oImg.setOpacity(0.7);
+  oImg.setLeft(1000);
+  canvas.add(oImg);
+ });
+});
+
+backdrop2.on('selected', function() {
+  fabric.Image.fromURL('Assets/royal.jpg', function(oImg) {
+      canvas.remove(backgroundImage);
+  backgroundImage = oImg;
+  //scale image down, and flip it, before adding it onto canvas
+  oImg.scale(2.67).setFlipX(true);
+  oImg.setOpacity(0.7);
+  oImg.setLeft(1000);
+  canvas.add(oImg);
+ });
+});
+
+backdrop3.on('selected', function() {
+  fabric.Image.fromURL('Assets/waterfall.jpg', function(oImg) {
+  canvas.remove(backgroundImage);
+  backgroundImage = oImg;
+  //scale image down, and flip it, before adding it onto canvas
+  oImg.scale(1.112).setFlipX(true);
+  oImg.setOpacity(0.7);
+  oImg.setLeft(1000);
+  canvas.add(oImg);
+ });
+});
+
+
+
+var menu2 = new fabric.Circle({
+  radius: 100,
+  fill: '#c3c1c7',
+  stroke: 'black',
+  strokeWidth : 5,
+  left: 1500,
+  top: 800
+});
+
+  fabric.Image.fromURL('Assets/weather.png', function(menu2Img) {
+  console.log(menu2Img);
+  menu2Img.scale(0.6).set({ left: 1530, top: 830});
+  
+    var menu2Group = new fabric.Group([ menu2, menu2Img ], {
+    left: 1700,
+    top: 1200,
+    });
+
+    canvas.add(menu2Group);
+
+    // Adding the weather api to the menu
+
+});
+
+
+var menu3 = new fabric.Circle({
+  radius: 100,
+  fill: '#c3c1c7',
+  stroke: 'black',
+  strokeWidth : 5,
+  left: 1500,
+  top: 800
+});
+
+fabric.Image.fromURL('Assets/language.jpeg', function(menu3Img) {
+  console.log(menu3Img);
+  menu3Img.scale(0.7).set({ left: 1540, top: 840});
+  
+    var menu3Group = new fabric.Group([ menu3, menu3Img ], {
+    left: 1900,
+    top: 1200,
+    });
+
+    canvas.add(menu3Group);
+});
+
+var menu4 = new fabric.Circle({
+  radius: 100,
+  fill: '#c3c1c7',
+  stroke: 'black',
+  strokeWidth : 5,
+  left: 1500,
+  top: 800
+});
+
+fabric.Image.fromURL('Assets/clock.png', function(menu4Img) {
+  console.log(menu4Img);
+  menu4Img.scale(0.1).set({ left: 1530, top: 830});
+  
+    var menu4Group = new fabric.Group([ menu4, menu4Img ], {
+    left: 2100,
+    top: 1200,
+    });
+
+      canvas.add(menu4Group);
+
+    //   menu4Group.on('selected',function(){
+    //   fabric.Image.fromURL('Assets/clock.png', function(clockImg) {
+    //   clockImg.scale(0.7).set({ left: 1500, top: 500});
+    // });
+
+});
+
+var menu5 = new fabric.Circle({
+  radius: 100,
+  fill: '#c3c1c7',
+  stroke: 'black',
+  strokeWidth : 5,
+  left: 1500,
+  top: 800
+});
+
+fabric.Image.fromURL('Assets/baby.png', function(menu5Img) {
+  console.log(menu5Img);
+  menu5Img.scale(0.25).set({ left: 1530, top: 830});
+  
+    var menu5Group = new fabric.Group([ menu5, menu5Img ], {
+    left: 2300,
+    top: 1200,
+    });
+
+    canvas.add(menu5Group);
+});
+
+
+
+
+//End of side wall Menu 
+
+//Side wall bath/shower display
+
+
+var showerDraw = new fabric.Circle({
+  radius: 100,
+  fill: '#c3c1c7',
+  stroke: 'black',
+  strokeWidth : 8,
+  left: 1500,
+  top: 1400
+});
+
+fabric.Image.fromURL('Assets/shower6.png', function(showerImg) {
+  console.log(showerImg);
+  showerImg.scale(2).set({ left: 1530, top: 1420});
+  
+    var showerGroup = new fabric.Group([ showerDraw, showerImg ], {
+    left: 1800,
+    top: 1800,
+    });
+
+    canvas.add(showerGroup);
+ });
+
+
+var bathDraw = new fabric.Circle({
+  radius: 100,
+  fill: '#c3c1c7',
+  stroke: 'black',
+  strokeWidth : 8,
+  left: 1500,
+  top: 1400
+});
+
+fabric.Image.fromURL('Assets/bath.png', function(bathImg) {
+  console.log(bathImg);
+  bathImg.scale(0.55).set({ left: 1530, top: 1425});
+  
+    var bathGroup = new fabric.Group([ bathDraw, bathImg ], {
+    left: 2000,
+    top: 1800,
+    });
+
+    canvas.add(bathGroup);
+ });
+
+
+// var matText = new fabric.Text('Shower', {
+//   left: 900,
+//   top: 800,
+//   fontSize: 50,
+//   originX: 'center',
+//   originY: 'center'
 // });
 
-//});
+
+
+//End of side wall bath/shower
+
+
+//Water in the tub
+
+fabric.Image.fromURL('Assets/filltub.svg', function(filltubImg) {
+  console.log(filltubImg);
+  // scale image down, and flip it, before adding it onto canvas
+   filltubImg.scale(1.5).setFlipX(true);
+   filltubImg.setLeft(3050);
+   filltubImg.setTop(1600);
+   //oImg.opacity(0.5);
+   canvas.add(filltubImg);
+ });
+
+
 
 // Adding an analog Clock 
 
+var clock = new fabric.Circle({
+  radius: 200,
+  fill: 'white',
+  stroke : 'gray',
+  strokeWidth : 5,
+  left: 500,
+  top: 1000
+});
 
 
 
@@ -317,13 +867,13 @@ var backdrop3 = new fabric.Circle({
 canvas.add(backWall);
 canvas.add(sideWall);
 canvas.add(frontWall);
-canvas.add(showerHead);
+//canvas.add(showerHead);
 canvas.add(bathSpout);
 canvas.add(waterControl);
 canvas.add(tempText);
 canvas.add(sunshine);
 canvas.add(snowflake);
-canvas.add(mat);
+canvas.add(tempDispGroup);
 canvas.add(backdrop1);
 canvas.add(backdrop2);
 canvas.add(backdrop3);
