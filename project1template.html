@@ -23,6 +23,66 @@
 var currentBlue = 0.1;
 var currentRed = 0.1;
 var backgroundImage;
+
+var btnBackground;
+var backgroundImages = ['moonlight.jpg', 'royal.jpg', 'waterfall.jpg'];
+var currentImage = 0;
+
+var btnWeather;
+var imgWeather;
+
+var btnLanguage;
+
+
+var btnClock;
+
+
+var btnSafety;
+var imgSafety;
+
+var btnBackgroundOnSelect = function(canvas){
+  var bgImage = backgroundImages[currentImage];
+
+  fabric.Image.fromURL('Assets/' + bgImage, function(image) {
+    canvas.remove(backgroundImage);
+    backgroundImage = image;
+    //scale image down, and flip it, before adding it onto canvas
+    if (currentImage == 0)
+      image.scale(1.338).setFlipX(true);
+    else if (currentImage == 1)
+      image.scale(2.67).setScaleY(1.8).setFlipX(true);
+    else if (currentImage == 2)
+      image.scale(1.1112).setScaleY(0.9).setFlipX(true);
+
+    image.setOpacity(0.7);
+    image.setLeft(1000);
+    canvas.add(image);
+
+    currentImage += 1;
+    if (currentImage > 2) currentImage = 0;
+  });    
+
+  canvas.deactivateAll();
+};
+
+var btnWeatherOnSelect = function(canvas){
+  if (imgWeather.getVisible())
+    imgWeather.setVisible(false);
+  else 
+    imgWeather.setVisible(true);
+};
+
+var btnSafetyOnSelect = function(canvas){
+  if (imgSafety.getOpacity() < 1.0){
+    imgSafety.setOpacity(1.0);
+
+    
+  }
+  else 
+    imgSafety.setOpacity(0.5);
+};
+
+/* MAIN!! */
 (function() {
 
 //Weather api starts here 
@@ -63,12 +123,12 @@ xmlhttp.onreadystatechange = function() {
         //console.log(myArr.main.temp)
 
         if(myArr.weather[0].main == 'Clouds'){
-          var imgInstance = new fabric.Image(images[6], {
+          imgWeather = new fabric.Image(images[6], {
           left: 100,
           top: 100,
           opacity: 0.85
           });
-          canvas.add(imgInstance);
+          canvas.add(imgWeather);
           //console.log(images[6]);
            var weatherText = new fabric.Text('Weather', {
              fontSize: 60,
@@ -80,12 +140,12 @@ xmlhttp.onreadystatechange = function() {
         }
 
           if(myArr.weather[0].main == 'Clear'){
-          var imgInstance = new fabric.Image(images[5], {
+          imgWeather = new fabric.Image(images[5], {
           left: 100,
           top: 100,
           opacity: 0.85
           });
-          canvas.add(imgInstance);
+          canvas.add(imgWeather);
           //console.log(images[6]);
            var weatherText = new fabric.Text('Weather', {
              fontSize: 60,
@@ -97,12 +157,12 @@ xmlhttp.onreadystatechange = function() {
         }
 
         if(myArr.weather[0].main == 'Snow'){
-          var imgInstance = new fabric.Image(images[3], {
+          imgWeather = new fabric.Image(images[3], {
           left: 100,
           top: 100,
           opacity: 0.85
           });
-          canvas.add(imgInstance);
+          canvas.add(imgWeather);
           //console.log(images[6]);
            var weatherText = new fabric.Text('Weather', {
              fontSize: 60,
@@ -114,12 +174,12 @@ xmlhttp.onreadystatechange = function() {
         }
 
         if(myArr.weather[0].main == 'Drizzle'){
-          var imgInstance = new fabric.Image(images[1], {
+          imgWeather = new fabric.Image(images[1], {
           left: 100,
           top: 100,
           opacity: 0.85
           });
-          canvas.add(imgInstance);
+          canvas.add(imgWeather);
           //console.log(images[6]);
            var weatherText = new fabric.Text('Weather', {
              fontSize: 60,
@@ -130,12 +190,12 @@ xmlhttp.onreadystatechange = function() {
            canvas.add(weatherText);
         }
         if(myArr.weather[0].main == 'Rain'){
-          var imgInstance = new fabric.Image(images[2], {
+          imgWeather = new fabric.Image(images[2], {
           left: 100,
           top: 100,
           opacity: 0.85
           });
-          canvas.add(imgInstance);
+          canvas.add(imgWeather);
           //console.log(images[6]);
            var weatherText = new fabric.Text('Weather', {
              fontSize: 60,
@@ -571,6 +631,7 @@ fabric.Image.fromURL('Assets/snowflake.png', function(snowflakeImg) {
 // Start of side wall Menu
 //!!!!!!!!!!!!! 6 icons group in a rectangle. 
 
+/* Background button behaviour */
 var menu1 = new fabric.Circle({
   radius: 100,
   fill: '#c3c1c7',
@@ -581,101 +642,23 @@ var menu1 = new fabric.Circle({
 });
 
 fabric.Image.fromURL('Assets/backdrop.png', function(menu1Img) {
-  console.log(menu1Img);
   menu1Img.scale(0.5).set({ left: 1520, top: 850});
   
-    var menu1Group = new fabric.Group([ menu1, menu1Img ], {
+  btnBackground = new fabric.Group([ menu1, menu1Img ], {
     left: 1500,
     top: 1200,
-    });
-
-    canvas.add(menu1Group);
-
-    var counter=0;
-
-    menu1Group.on('selected',function(){
-      counter+=1;
-      if(counter==1)
-      {
-    fabric.Image.fromURL('Assets/moonlight.jpg', function(oImg) {
-    canvas.remove(backgroundImage);
-    backgroundImage = oImg;
-    //scale image down, and flip it, before adding it onto canvas
-    oImg.scale(1.338).setFlipX(true);
-    oImg.setOpacity(0.7);
-    oImg.setLeft(1000);
-    canvas.add(oImg);
-    });    
-
-    canvas.deactivateAll();
-  }
   });
+  canvas.add(btnBackground);
 
+  btnBackground.on('selected', function(){
+    btnBackgroundOnSelect(canvas);
+  });
 });
-
-
+/* End Background button behaviour */
 
 // Back wall controls -- Add ons
 
-//Adding Backdrop imagery
-var backdrop1 = new fabric.Circle({
-  radius: 30,
-  fill: 'gray',
-  left: 130,
-  top: 60
-});
-var backdrop2 = new fabric.Circle({
-  radius: 30,
-  fill: 'gray',
-  left: 190,
-  top: 60
-});
-var backdrop3 = new fabric.Circle({
-  radius: 30,
-  fill: 'gray',
-  left: 250,
-  top: 60
-});
-
-
-backdrop1.on('selected', function() {
-  fabric.Image.fromURL('Assets/moonlight.jpg', function(oImg) {
-  canvas.remove(backgroundImage);
-  backgroundImage = oImg;
-  //scale image down, and flip it, before adding it onto canvas
-  oImg.scale(1.338).setFlipX(true);
-  oImg.setOpacity(0.7);
-  oImg.setLeft(1000);
-  canvas.add(oImg);
- });
-});
-
-backdrop2.on('selected', function() {
-  fabric.Image.fromURL('Assets/royal.jpg', function(oImg) {
-      canvas.remove(backgroundImage);
-  backgroundImage = oImg;
-  //scale image down, and flip it, before adding it onto canvas
-  oImg.scale(2.67).setFlipX(true);
-  oImg.setOpacity(0.7);
-  oImg.setLeft(1000);
-  canvas.add(oImg);
- });
-});
-
-backdrop3.on('selected', function() {
-  fabric.Image.fromURL('Assets/waterfall.jpg', function(oImg) {
-  canvas.remove(backgroundImage);
-  backgroundImage = oImg;
-  //scale image down, and flip it, before adding it onto canvas
-  oImg.scale(1.112).setFlipX(true);
-  oImg.setOpacity(0.7);
-  oImg.setLeft(1000);
-  canvas.add(oImg);
- });
-});
-
-
-
+/* Weather button behaviour */
 var menu2 = new fabric.Circle({
   radius: 100,
   fill: '#c3c1c7',
@@ -685,21 +668,19 @@ var menu2 = new fabric.Circle({
   top: 800
 });
 
-  fabric.Image.fromURL('Assets/weather.png', function(menu2Img) {
-  console.log(menu2Img);
+fabric.Image.fromURL('Assets/weather.png', function(menu2Img) {
   menu2Img.scale(0.6).set({ left: 1530, top: 830});
   
-    var menu2Group = new fabric.Group([ menu2, menu2Img ], {
-    left: 1700,
-    top: 1200,
-    });
+  btnWeather = new fabric.Group([menu2, menu2Img], 
+      { left: 1700, top: 1200}
+  );
+  canvas.add(btnWeather);
 
-    canvas.add(menu2Group);
-
-    // Adding the weather api to the menu
-
+  btnWeather.on('selected', function(){
+    btnWeatherOnSelect(canvas);
+  });
 });
-
+/* End Background button behaviour */
 
 var menu3 = new fabric.Circle({
   radius: 100,
@@ -749,27 +730,30 @@ fabric.Image.fromURL('Assets/clock.png', function(menu4Img) {
 
 });
 
-var menu5 = new fabric.Circle({
+/* Safety button behaviour */
+imgSafety = new fabric.Circle({
   radius: 100,
   fill: '#c3c1c7',
   stroke: 'black',
   strokeWidth : 5,
   left: 1500,
-  top: 800
+  top: 800,
+  opacity: 0.3
 });
 
 fabric.Image.fromURL('Assets/baby.png', function(menu5Img) {
-  console.log(menu5Img);
-  menu5Img.scale(0.25).set({ left: 1530, top: 830});
+  menu5Img.scale(0.25).set({ left: 1530, top: 830 });
   
-    var menu5Group = new fabric.Group([ menu5, menu5Img ], {
-    left: 2300,
-    top: 1200,
-    });
+  btnSafety = new fabric.Group([imgSafety, menu5Img], 
+    { left: 2300, top: 1200 }
+  );
+  canvas.add(btnSafety);
 
-    canvas.add(menu5Group);
+  btnSafety.on('selected', function(){
+    btnSafetyOnSelect(canvas);
+  });
 });
-
+/* End Safety button behaviour */
 
 
 
@@ -874,9 +858,6 @@ canvas.add(tempText);
 canvas.add(sunshine);
 canvas.add(snowflake);
 canvas.add(tempDispGroup);
-canvas.add(backdrop1);
-canvas.add(backdrop2);
-canvas.add(backdrop3);
 //canvas.add(moonlightInstance);
 
 
@@ -909,6 +890,7 @@ function zoomAll(SCALE_FACTOR) {
 
 
 zoomAll(canvas.height / localHeight);
+
 
 })();
 
