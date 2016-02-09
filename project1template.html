@@ -166,7 +166,7 @@ var btnShowerOnSelect = function(canvas){
 
 var btnWaterflowOnSelect = function(canvas){
 
-    fabric.Image.fromURL('Assets/water.png', function(image) { 
+    fabric.Image.fromURL('Assets/water.PNG', function(image) { 
 
     if (currentflow == 0)
       image.scale(1.5).setFlipX(true).setLeft(3350).setTop(1850);
@@ -209,7 +209,7 @@ images.push(createImage("Assets/rain.png", "rain"));
 images.push(createImage("Assets/snow.png", "snow"));
 images.push(createImage("Assets/fog.png", "atmosphere"));
 images.push(createImage("Assets/clearsky.png", "clear"));
-images.push(createImage("Assets/clouds.png", "clouds"));
+images.push(createImage("Assets/clouds.PNG", "clouds"));
 images.push(createImage("Assets/extreme.png", "extreme"));
 images.push(createImage("Assets/breeze.png", "additional"));
 
@@ -747,7 +747,7 @@ var menu1 = new fabric.Circle({
   top: 800
 });
 
-fabric.Image.fromURL('Assets/backdrop.png', function(menu1Img) {
+fabric.Image.fromURL('Assets/backdrop.PNG', function(menu1Img) {
   menu1Img.scale(0.5).set({ left: 1520, top: 850});
   
   btnBackground = new fabric.Group([ menu1, menu1Img ], {
